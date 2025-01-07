@@ -244,15 +244,40 @@
       <column-instance column='[invoice_no]' derivation='Count' name='[cnt:invoice_no:qk]' pivot='key' type='quantitative' />
       <column-instance column='[invoice_date]' derivation='CountD' name='[ctd:invoice_date:qk]' pivot='key' type='quantitative' />
       <column-instance column='[invoice_no]' derivation='CountD' name='[ctd:invoice_no:qk]' pivot='key' type='quantitative' />
+      <column-instance column='[invoice_date]' derivation='Month' name='[mn:invoice_date:ok]' pivot='key' type='ordinal' />
       <column-instance column='[invoice_date]' derivation='MY' name='[my:invoice_date:ok]' pivot='key' type='ordinal' />
       <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
       <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
       <column-instance column='[invoice_no]' derivation='None' name='[none:invoice_no:nk]' pivot='key' type='nominal' />
       <column-instance column='[payment_method]' derivation='None' name='[none:payment_method:nk]' pivot='key' type='nominal' />
       <column-instance column='[Calculation_1105352267185954816]' derivation='Sum' name='[sum:Calculation_1105352267185954816:qk]' pivot='key' type='quantitative' />
+      <column-instance column='[invoice_date]' derivation='Month-Trunc' name='[tmn:invoice_date:ok]' pivot='key' type='ordinal' />
+      <column-instance column='[invoice_date]' derivation='Year-Trunc' name='[tyr:invoice_date:ok]' pivot='key' type='ordinal' />
+      <group caption='Action (Category)' hidden='true' name='[Action (Category)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[category]' />
+        </groupfilter>
+      </group>
+      <group caption='Action (MONTH(Invoice Date))' hidden='true' name='[Action (MONTH(Invoice Date))]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[tmn:invoice_date:ok]' />
+        </groupfilter>
+      </group>
+      <group caption='Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))' hidden='true' name='[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[mn:invoice_date:ok]' />
+          <groupfilter function='level-members' level='[my:invoice_date:ok]' />
+          <groupfilter function='level-members' level='[tyr:invoice_date:ok]' />
+        </groupfilter>
+      </group>
       <group caption='Action (Payment Method)' hidden='true' name='[Action (Payment Method)]' name-style='unqualified' user:auto-column='sheet_link'>
         <groupfilter function='crossjoin'>
           <groupfilter function='level-members' level='[payment_method]' />
+        </groupfilter>
+      </group>
+      <group caption='Action (Shopping Mall)' hidden='true' name='[Action (Shopping Mall)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[shopping_mall]' />
         </groupfilter>
       </group>
       <extract _.fcp.VConnDownstreamExtractsWithWarnings.true...user-specific='false' count='-1' enabled='true' object-id='' units='records'>
@@ -411,32 +436,6 @@
       <layout dim-ordering='alphabetic' measure-ordering='alphabetic' rowDisplayCount='100' show-structure='true' />
       <style>
         <style-rule element='mark'>
-          <encoding attr='color' field='[none:category:nk]' type='palette'>
-            <map to='#4e79a7'>
-              <bucket>&quot;Books&quot;</bucket>
-            </map>
-            <map to='#59a14f'>
-              <bucket>&quot;Shoes&quot;</bucket>
-            </map>
-            <map to='#76b7b2'>
-              <bucket>&quot;Food &amp; Beverage&quot;</bucket>
-            </map>
-            <map to='#b07aa1'>
-              <bucket>&quot;Technology&quot;</bucket>
-            </map>
-            <map to='#e15759'>
-              <bucket>&quot;Cosmetics&quot;</bucket>
-            </map>
-            <map to='#edc948'>
-              <bucket>&quot;Souvenir&quot;</bucket>
-            </map>
-            <map to='#f28e2b'>
-              <bucket>&quot;Clothing&quot;</bucket>
-            </map>
-            <map to='#ff9da7'>
-              <bucket>&quot;Toys&quot;</bucket>
-            </map>
-          </encoding>
           <encoding attr='color' field='[:Measure Names]' type='palette'>
             <map to='#4e79a7'>
               <bucket>&quot;[federated.0pazx8f1decswp1576b7r14fdvgx].[cnt:invoice_date:qk]&quot;</bucket>
@@ -461,6 +460,32 @@
             </map>
             <map to='#f28e2b'>
               <bucket>&quot;[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]&quot;</bucket>
+            </map>
+          </encoding>
+          <encoding attr='color' field='[none:category:nk]' type='palette'>
+            <map to='#4e79a7'>
+              <bucket>&quot;Books&quot;</bucket>
+            </map>
+            <map to='#59a14f'>
+              <bucket>&quot;Shoes&quot;</bucket>
+            </map>
+            <map to='#76b7b2'>
+              <bucket>&quot;Food &amp; Beverage&quot;</bucket>
+            </map>
+            <map to='#b07aa1'>
+              <bucket>&quot;Technology&quot;</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>&quot;Cosmetics&quot;</bucket>
+            </map>
+            <map to='#edc948'>
+              <bucket>&quot;Souvenir&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;Clothing&quot;</bucket>
+            </map>
+            <map to='#ff9da7'>
+              <bucket>&quot;Toys&quot;</bucket>
             </map>
           </encoding>
           <encoding attr='color' field='[none:payment_method:nk]' type='palette'>
@@ -615,7 +640,7 @@
         <param name='target' value='Sales by Gender' />
       </command>
     </action>
-    <action caption='Filter 1 (generated)' name='[Action2_1903D1F8E9CE43E6A216ECD6B73EDE39]'>
+    <action caption='Filter 1 (generated)' name='[Action3_73CCDEF79AF14B22A73DE5C134743BC6]'>
       <activation auto-clear='true' type='on-select' />
       <source dashboard='DASHBOARDOF CUSTOMER SALES ANALYSIS' type='sheet' worksheet='Top 5 Malls by Customer Sales' />
       <command command='tsc:tsl-filter'>
@@ -623,9 +648,41 @@
         <param name='target' value='DASHBOARDOF CUSTOMER SALES ANALYSIS' />
       </command>
     </action>
-    <action caption='Filter 2 (generated)' name='[Action3_6256E476F5C24B5799E8B9914934DD28]'>
+    <action caption='Filter 3 (generated)' name='[Action4_17004C6A3F99428998F17BB3CD05ACA5]'>
+      <activation auto-clear='true' type='on-select' />
+      <source dashboard='DASHBOARDOF CUSTOMER SALES ANALYSIS' type='sheet' worksheet='Yearly Sales Trend' />
+      <command command='tsc:tsl-filter'>
+        <param name='special-fields' value='all' />
+        <param name='target' value='DASHBOARDOF CUSTOMER SALES ANALYSIS' />
+      </command>
+    </action>
+    <action caption='Filter 2 (generated)' name='[Action4_84D5937A732A462CB5F7A62103B9FA18]'>
       <activation auto-clear='true' type='on-select' />
       <source dashboard='DASHBOARDOF CUSTOMER SALES ANALYSIS' type='sheet' worksheet='Payment Method Analysis' />
+      <command command='tsc:tsl-filter'>
+        <param name='special-fields' value='all' />
+        <param name='target' value='DASHBOARDOF CUSTOMER SALES ANALYSIS' />
+      </command>
+    </action>
+    <action caption='Filter 4 (generated)' name='[Action5_8F7B0F42400C4B16B28118A1376980AA]'>
+      <activation auto-clear='true' type='on-select' />
+      <source dashboard='DASHBOARDOF CUSTOMER SALES ANALYSIS' type='sheet' worksheet='Orders vs. Sales' />
+      <command command='tsc:tsl-filter'>
+        <param name='special-fields' value='all' />
+        <param name='target' value='DASHBOARDOF CUSTOMER SALES ANALYSIS' />
+      </command>
+    </action>
+    <action caption='Filter 5 (generated)' name='[Action6_C2CB45A3BD4649089E0A1AC9968D9298]'>
+      <activation auto-clear='true' type='on-select' />
+      <source dashboard='DASHBOARDOF CUSTOMER SALES ANALYSIS' type='sheet' worksheet='Sales by Gender' />
+      <command command='tsc:tsl-filter'>
+        <param name='special-fields' value='all' />
+        <param name='target' value='DASHBOARDOF CUSTOMER SALES ANALYSIS' />
+      </command>
+    </action>
+    <action caption='Filter 6 (generated)' name='[Action7_619215C08B744C1BBF20D222F2585E5E]'>
+      <activation auto-clear='true' type='on-select' />
+      <source dashboard='DASHBOARDOF CUSTOMER SALES ANALYSIS' type='sheet' worksheet='Top 5 Sales by Category' />
       <command command='tsc:tsl-filter'>
         <param name='special-fields' value='all' />
         <param name='target' value='DASHBOARDOF CUSTOMER SALES ANALYSIS' />
@@ -650,25 +707,48 @@
             <column caption='Total Sales' datatype='real' name='[Calculation_1105352267185954816]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='[price]*[quantity]' />
             </column>
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
             <column-instance column='[invoice_no]' derivation='CountD' name='[ctd:invoice_no:qk]' pivot='key' type='quantitative' />
             <column caption='Invoice Date' datatype='date' name='[invoice_date]' role='dimension' type='ordinal' />
             <column caption='Invoice No' datatype='string' name='[invoice_no]' role='dimension' type='nominal' />
+            <column-instance column='[invoice_date]' derivation='Month' name='[mn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='MY' name='[my:invoice_date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[payment_method]' derivation='None' name='[none:payment_method:nk]' pivot='key' type='nominal' />
             <column caption='Payment Method' datatype='string' name='[payment_method]' role='dimension' type='nominal' />
             <column caption='Price' datatype='real' name='[price]' role='measure' type='quantitative' />
             <column caption='Quantity' datatype='integer' name='[quantity]' role='measure' type='quantitative' />
+            <column caption='Shopping Mall' datatype='string' name='[shopping_mall]' role='dimension' type='nominal' />
             <column-instance column='[Calculation_1105352267185954816]' derivation='Sum' name='[sum:Calculation_1105352267185954816:qk]' pivot='key' type='quantitative' />
             <column-instance column='[invoice_date]' derivation='Month-Trunc' name='[tmn:invoice_date:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[invoice_date]' derivation='Year-Trunc' name='[tyr:invoice_date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]'>
+            <groupfilter function='member' level='[category]' member='&quot;Toys&quot;' user:ui-action-filter='[Action7_619215C08B744C1BBF20D222F2585E5E]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action4_17004C6A3F99428998F17BB3CD05ACA5]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
+              <groupfilter function='member' level='[mn:invoice_date:ok]' member='6' />
+              <groupfilter function='crossjoin'>
+                <groupfilter function='member' level='[my:invoice_date:ok]' member='202106' />
+                <groupfilter function='member' level='[tyr:invoice_date:ok]' member='#2021-01-01 00:00:00#' />
+              </groupfilter>
+            </groupfilter>
+          </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]'>
-            <groupfilter function='level-members' level='[payment_method]' user:ui-action-filter='[Action3_6256E476F5C24B5799E8B9914934DD28]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+            <groupfilter function='member' level='[payment_method]' member='&quot;Debit Card&quot;' user:ui-action-filter='[Action4_84D5937A732A462CB5F7A62103B9FA18]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]'>
+            <groupfilter function='member' level='[shopping_mall]' member='&quot;Metropol AVM&quot;' user:ui-action-filter='[Action3_73CCDEF79AF14B22A73DE5C134743BC6]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[none:payment_method:nk]'>
             <groupfilter function='level-members' level='[none:payment_method:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <slices>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[none:payment_method:nk]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]</column>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -805,17 +885,46 @@
             <column caption='Total Sales' datatype='real' name='[Calculation_1105352267185954816]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='[price]*[quantity]' />
             </column>
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Invoice Date' datatype='date' name='[invoice_date]' role='dimension' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='Month' name='[mn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='MY' name='[my:invoice_date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[payment_method]' derivation='None' name='[none:payment_method:nk]' pivot='key' type='nominal' />
             <column caption='Payment Method' datatype='string' name='[payment_method]' role='dimension' type='nominal' />
             <column caption='Price' datatype='real' name='[price]' role='measure' type='quantitative' />
             <column caption='Quantity' datatype='integer' name='[quantity]' role='measure' type='quantitative' />
+            <column caption='Shopping Mall' datatype='string' name='[shopping_mall]' role='dimension' type='nominal' />
             <column-instance column='[Calculation_1105352267185954816]' derivation='Sum' name='[sum:Calculation_1105352267185954816:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[invoice_date]' derivation='Month-Trunc' name='[tmn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='Year-Trunc' name='[tyr:invoice_date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]'>
+            <groupfilter function='member' level='[category]' member='&quot;Toys&quot;' user:ui-action-filter='[Action7_619215C08B744C1BBF20D222F2585E5E]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]'>
+            <groupfilter function='member' level='[tmn:invoice_date:ok]' member='#2021-06-01 00:00:00#' user:ui-action-filter='[Action5_8F7B0F42400C4B16B28118A1376980AA]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action4_17004C6A3F99428998F17BB3CD05ACA5]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
+              <groupfilter function='member' level='[mn:invoice_date:ok]' member='6' />
+              <groupfilter function='crossjoin'>
+                <groupfilter function='member' level='[my:invoice_date:ok]' member='202106' />
+                <groupfilter function='member' level='[tyr:invoice_date:ok]' member='#2021-01-01 00:00:00#' />
+              </groupfilter>
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]'>
+            <groupfilter function='member' level='[shopping_mall]' member='&quot;Metropol AVM&quot;' user:ui-action-filter='[Action3_73CCDEF79AF14B22A73DE5C134743BC6]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[none:payment_method:nk]'>
             <groupfilter function='level-members' level='[none:payment_method:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <slices>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[none:payment_method:nk]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -891,18 +1000,47 @@
             <column caption='Total Sales' datatype='real' name='[Calculation_1105352267185954816]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='[price]*[quantity]' />
             </column>
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
             <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column caption='Invoice Date' datatype='date' name='[invoice_date]' role='dimension' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='Month' name='[mn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='MY' name='[my:invoice_date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
             <column caption='Payment Method' datatype='string' name='[payment_method]' role='dimension' type='nominal' />
             <column caption='Price' datatype='real' name='[price]' role='measure' type='quantitative' />
             <column caption='Quantity' datatype='integer' name='[quantity]' role='measure' type='quantitative' />
+            <column caption='Shopping Mall' datatype='string' name='[shopping_mall]' role='dimension' type='nominal' />
             <column-instance column='[Calculation_1105352267185954816]' derivation='Sum' name='[sum:Calculation_1105352267185954816:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[invoice_date]' derivation='Month-Trunc' name='[tmn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='Year-Trunc' name='[tyr:invoice_date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]'>
+            <groupfilter function='member' level='[category]' member='&quot;Toys&quot;' user:ui-action-filter='[Action7_619215C08B744C1BBF20D222F2585E5E]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]'>
+            <groupfilter function='member' level='[tmn:invoice_date:ok]' member='#2021-06-01 00:00:00#' user:ui-action-filter='[Action5_8F7B0F42400C4B16B28118A1376980AA]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action4_17004C6A3F99428998F17BB3CD05ACA5]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
+              <groupfilter function='member' level='[mn:invoice_date:ok]' member='6' />
+              <groupfilter function='crossjoin'>
+                <groupfilter function='member' level='[my:invoice_date:ok]' member='202106' />
+                <groupfilter function='member' level='[tyr:invoice_date:ok]' member='#2021-01-01 00:00:00#' />
+              </groupfilter>
+            </groupfilter>
+          </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]'>
-            <groupfilter function='level-members' level='[payment_method]' user:ui-action-filter='[Action3_6256E476F5C24B5799E8B9914934DD28]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+            <groupfilter function='member' level='[payment_method]' member='&quot;Debit Card&quot;' user:ui-action-filter='[Action4_84D5937A732A462CB5F7A62103B9FA18]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]'>
+            <groupfilter function='member' level='[shopping_mall]' member='&quot;Metropol AVM&quot;' user:ui-action-filter='[Action3_73CCDEF79AF14B22A73DE5C134743BC6]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
           </filter>
           <slices>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]</column>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -998,16 +1136,37 @@
             <column caption='Total Sales' datatype='real' name='[Calculation_1105352267185954816]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='[price]*[quantity]' />
             </column>
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Invoice Date' datatype='date' name='[invoice_date]' role='dimension' type='ordinal' />
             <column-instance column='[shopping_mall]' derivation='Max' name='[max:shopping_mall:nk]' pivot='key' type='nominal' />
+            <column-instance column='[invoice_date]' derivation='Month' name='[mn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='MY' name='[my:invoice_date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[shopping_mall]' derivation='None' name='[none:shopping_mall:nk]' pivot='key' type='nominal' />
             <column caption='Payment Method' datatype='string' name='[payment_method]' role='dimension' type='nominal' />
             <column caption='Price' datatype='real' name='[price]' role='measure' type='quantitative' />
             <column caption='Quantity' datatype='integer' name='[quantity]' role='measure' type='quantitative' />
             <column caption='Shopping Mall' datatype='string' name='[shopping_mall]' role='dimension' type='nominal' />
             <column-instance column='[Calculation_1105352267185954816]' derivation='Sum' name='[sum:Calculation_1105352267185954816:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[invoice_date]' derivation='Month-Trunc' name='[tmn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='Year-Trunc' name='[tyr:invoice_date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]'>
+            <groupfilter function='member' level='[category]' member='&quot;Toys&quot;' user:ui-action-filter='[Action7_619215C08B744C1BBF20D222F2585E5E]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]'>
+            <groupfilter function='member' level='[tmn:invoice_date:ok]' member='#2021-06-01 00:00:00#' user:ui-action-filter='[Action5_8F7B0F42400C4B16B28118A1376980AA]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action4_17004C6A3F99428998F17BB3CD05ACA5]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
+              <groupfilter function='member' level='[mn:invoice_date:ok]' member='6' />
+              <groupfilter function='crossjoin'>
+                <groupfilter function='member' level='[my:invoice_date:ok]' member='202106' />
+                <groupfilter function='member' level='[tyr:invoice_date:ok]' member='#2021-01-01 00:00:00#' />
+              </groupfilter>
+            </groupfilter>
+          </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]'>
-            <groupfilter function='level-members' level='[payment_method]' user:ui-action-filter='[Action3_6256E476F5C24B5799E8B9914934DD28]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+            <groupfilter function='member' level='[payment_method]' member='&quot;Debit Card&quot;' user:ui-action-filter='[Action4_84D5937A732A462CB5F7A62103B9FA18]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[max:shopping_mall:nk]'>
             <groupfilter function='union' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
@@ -1028,6 +1187,9 @@
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[max:shopping_mall:nk]</column>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[none:shopping_mall:nk]</column>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -1117,14 +1279,35 @@
               <calculation class='tableau' formula='[price]*[quantity]' />
             </column>
             <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Invoice Date' datatype='date' name='[invoice_date]' role='dimension' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='Month' name='[mn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='MY' name='[my:invoice_date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
             <column caption='Payment Method' datatype='string' name='[payment_method]' role='dimension' type='nominal' />
             <column caption='Price' datatype='real' name='[price]' role='measure' type='quantitative' />
             <column caption='Quantity' datatype='integer' name='[quantity]' role='measure' type='quantitative' />
+            <column caption='Shopping Mall' datatype='string' name='[shopping_mall]' role='dimension' type='nominal' />
             <column-instance column='[Calculation_1105352267185954816]' derivation='Sum' name='[sum:Calculation_1105352267185954816:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[invoice_date]' derivation='Month-Trunc' name='[tmn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='Year-Trunc' name='[tyr:invoice_date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]'>
+            <groupfilter function='member' level='[tmn:invoice_date:ok]' member='#2021-06-01 00:00:00#' user:ui-action-filter='[Action5_8F7B0F42400C4B16B28118A1376980AA]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action4_17004C6A3F99428998F17BB3CD05ACA5]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
+              <groupfilter function='member' level='[mn:invoice_date:ok]' member='6' />
+              <groupfilter function='crossjoin'>
+                <groupfilter function='member' level='[my:invoice_date:ok]' member='202106' />
+                <groupfilter function='member' level='[tyr:invoice_date:ok]' member='#2021-01-01 00:00:00#' />
+              </groupfilter>
+            </groupfilter>
+          </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]'>
-            <groupfilter function='level-members' level='[payment_method]' user:ui-action-filter='[Action3_6256E476F5C24B5799E8B9914934DD28]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+            <groupfilter function='member' level='[payment_method]' member='&quot;Debit Card&quot;' user:ui-action-filter='[Action4_84D5937A732A462CB5F7A62103B9FA18]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]'>
+            <groupfilter function='member' level='[shopping_mall]' member='&quot;Metropol AVM&quot;' user:ui-action-filter='[Action3_73CCDEF79AF14B22A73DE5C134743BC6]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[none:category:nk]'>
             <groupfilter function='union' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
@@ -1140,7 +1323,10 @@
           </shelf-sorts>
           <slices>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[none:category:nk]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]</column>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -1208,15 +1394,44 @@
             <datasource caption='customer_shopping_data (customer_shopping_data)' name='federated.0pazx8f1decswp1576b7r14fdvgx' />
           </datasources>
           <datasource-dependencies datasource='federated.0pazx8f1decswp1576b7r14fdvgx'>
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
             <column-instance column='[customer_id]' derivation='CountD' name='[ctd:customer_id:qk]' pivot='key' type='quantitative' />
             <column caption='Customer Id' datatype='string' name='[customer_id]' role='dimension' type='nominal' />
+            <column caption='Invoice Date' datatype='date' name='[invoice_date]' role='dimension' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='Month' name='[mn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='MY' name='[my:invoice_date:ok]' pivot='key' type='ordinal' />
             <column caption='Payment Method' datatype='string' name='[payment_method]' role='dimension' type='nominal' />
+            <column caption='Shopping Mall' datatype='string' name='[shopping_mall]' role='dimension' type='nominal' />
+            <column-instance column='[invoice_date]' derivation='Month-Trunc' name='[tmn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='Year-Trunc' name='[tyr:invoice_date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]'>
+            <groupfilter function='member' level='[category]' member='&quot;Toys&quot;' user:ui-action-filter='[Action7_619215C08B744C1BBF20D222F2585E5E]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]'>
+            <groupfilter function='member' level='[tmn:invoice_date:ok]' member='#2021-06-01 00:00:00#' user:ui-action-filter='[Action5_8F7B0F42400C4B16B28118A1376980AA]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action4_17004C6A3F99428998F17BB3CD05ACA5]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
+              <groupfilter function='member' level='[mn:invoice_date:ok]' member='6' />
+              <groupfilter function='crossjoin'>
+                <groupfilter function='member' level='[my:invoice_date:ok]' member='202106' />
+                <groupfilter function='member' level='[tyr:invoice_date:ok]' member='#2021-01-01 00:00:00#' />
+              </groupfilter>
+            </groupfilter>
+          </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]'>
-            <groupfilter function='level-members' level='[payment_method]' user:ui-action-filter='[Action3_6256E476F5C24B5799E8B9914934DD28]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+            <groupfilter function='member' level='[payment_method]' member='&quot;Debit Card&quot;' user:ui-action-filter='[Action4_84D5937A732A462CB5F7A62103B9FA18]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]'>
+            <groupfilter function='member' level='[shopping_mall]' member='&quot;Metropol AVM&quot;' user:ui-action-filter='[Action3_73CCDEF79AF14B22A73DE5C134743BC6]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
           </filter>
           <slices>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]</column>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -1280,16 +1495,45 @@
             <column caption='Total Sales' datatype='real' name='[Calculation_1105352267185954816]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='[price]*[quantity]' />
             </column>
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Invoice Date' datatype='date' name='[invoice_date]' role='dimension' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='Month' name='[mn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='MY' name='[my:invoice_date:ok]' pivot='key' type='ordinal' />
             <column caption='Payment Method' datatype='string' name='[payment_method]' role='dimension' type='nominal' />
             <column caption='Price' datatype='real' name='[price]' role='measure' type='quantitative' />
             <column caption='Quantity' datatype='integer' name='[quantity]' role='measure' type='quantitative' />
+            <column caption='Shopping Mall' datatype='string' name='[shopping_mall]' role='dimension' type='nominal' />
             <column-instance column='[Calculation_1105352267185954816]' derivation='Sum' name='[sum:Calculation_1105352267185954816:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[invoice_date]' derivation='Month-Trunc' name='[tmn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='Year-Trunc' name='[tyr:invoice_date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]'>
+            <groupfilter function='member' level='[category]' member='&quot;Toys&quot;' user:ui-action-filter='[Action7_619215C08B744C1BBF20D222F2585E5E]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]'>
+            <groupfilter function='member' level='[tmn:invoice_date:ok]' member='#2021-06-01 00:00:00#' user:ui-action-filter='[Action5_8F7B0F42400C4B16B28118A1376980AA]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action4_17004C6A3F99428998F17BB3CD05ACA5]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
+              <groupfilter function='member' level='[mn:invoice_date:ok]' member='6' />
+              <groupfilter function='crossjoin'>
+                <groupfilter function='member' level='[my:invoice_date:ok]' member='202106' />
+                <groupfilter function='member' level='[tyr:invoice_date:ok]' member='#2021-01-01 00:00:00#' />
+              </groupfilter>
+            </groupfilter>
+          </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]'>
-            <groupfilter function='level-members' level='[payment_method]' user:ui-action-filter='[Action3_6256E476F5C24B5799E8B9914934DD28]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+            <groupfilter function='member' level='[payment_method]' member='&quot;Debit Card&quot;' user:ui-action-filter='[Action4_84D5937A732A462CB5F7A62103B9FA18]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]'>
+            <groupfilter function='member' level='[shopping_mall]' member='&quot;Metropol AVM&quot;' user:ui-action-filter='[Action3_73CCDEF79AF14B22A73DE5C134743BC6]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
           </filter>
           <slices>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]</column>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -1360,15 +1604,44 @@
             <datasource caption='customer_shopping_data (customer_shopping_data)' name='federated.0pazx8f1decswp1576b7r14fdvgx' />
           </datasources>
           <datasource-dependencies datasource='federated.0pazx8f1decswp1576b7r14fdvgx'>
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
             <column-instance column='[invoice_no]' derivation='Count' name='[cnt:invoice_no:qk]' pivot='key' type='quantitative' />
+            <column caption='Invoice Date' datatype='date' name='[invoice_date]' role='dimension' type='ordinal' />
             <column caption='Invoice No' datatype='string' name='[invoice_no]' role='dimension' type='nominal' />
+            <column-instance column='[invoice_date]' derivation='Month' name='[mn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='MY' name='[my:invoice_date:ok]' pivot='key' type='ordinal' />
             <column caption='Payment Method' datatype='string' name='[payment_method]' role='dimension' type='nominal' />
+            <column caption='Shopping Mall' datatype='string' name='[shopping_mall]' role='dimension' type='nominal' />
+            <column-instance column='[invoice_date]' derivation='Month-Trunc' name='[tmn:invoice_date:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[invoice_date]' derivation='Year-Trunc' name='[tyr:invoice_date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]'>
+            <groupfilter function='member' level='[category]' member='&quot;Toys&quot;' user:ui-action-filter='[Action7_619215C08B744C1BBF20D222F2585E5E]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]'>
+            <groupfilter function='member' level='[tmn:invoice_date:ok]' member='#2021-06-01 00:00:00#' user:ui-action-filter='[Action5_8F7B0F42400C4B16B28118A1376980AA]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action4_17004C6A3F99428998F17BB3CD05ACA5]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
+              <groupfilter function='member' level='[mn:invoice_date:ok]' member='6' />
+              <groupfilter function='crossjoin'>
+                <groupfilter function='member' level='[my:invoice_date:ok]' member='202106' />
+                <groupfilter function='member' level='[tyr:invoice_date:ok]' member='#2021-01-01 00:00:00#' />
+              </groupfilter>
+            </groupfilter>
+          </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]'>
-            <groupfilter function='level-members' level='[payment_method]' user:ui-action-filter='[Action3_6256E476F5C24B5799E8B9914934DD28]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+            <groupfilter function='member' level='[payment_method]' member='&quot;Debit Card&quot;' user:ui-action-filter='[Action4_84D5937A732A462CB5F7A62103B9FA18]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]'>
+            <groupfilter function='member' level='[shopping_mall]' member='&quot;Metropol AVM&quot;' user:ui-action-filter='[Action3_73CCDEF79AF14B22A73DE5C134743BC6]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
           </filter>
           <slices>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]</column>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date),MY(Invoice Date),YEAR(Invoice Date))]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -1438,17 +1711,29 @@
             <column caption='Total Sales' datatype='real' name='[Calculation_1105352267185954816]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='[price]*[quantity]' />
             </column>
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
             <column caption='Invoice Date' datatype='date' name='[invoice_date]' role='dimension' type='ordinal' />
             <column-instance column='[invoice_date]' derivation='Month' name='[mn:invoice_date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[invoice_date]' derivation='MY' name='[my:invoice_date:ok]' pivot='key' type='ordinal' />
             <column caption='Payment Method' datatype='string' name='[payment_method]' role='dimension' type='nominal' />
             <column caption='Price' datatype='real' name='[price]' role='measure' type='quantitative' />
             <column caption='Quantity' datatype='integer' name='[quantity]' role='measure' type='quantitative' />
+            <column caption='Shopping Mall' datatype='string' name='[shopping_mall]' role='dimension' type='nominal' />
             <column-instance column='[Calculation_1105352267185954816]' derivation='Sum' name='[sum:Calculation_1105352267185954816:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[invoice_date]' derivation='Month-Trunc' name='[tmn:invoice_date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[invoice_date]' derivation='Year-Trunc' name='[tyr:invoice_date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]'>
+            <groupfilter function='member' level='[category]' member='&quot;Toys&quot;' user:ui-action-filter='[Action7_619215C08B744C1BBF20D222F2585E5E]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]'>
+            <groupfilter function='member' level='[tmn:invoice_date:ok]' member='#2021-06-01 00:00:00#' user:ui-action-filter='[Action5_8F7B0F42400C4B16B28118A1376980AA]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]'>
-            <groupfilter function='level-members' level='[payment_method]' user:ui-action-filter='[Action3_6256E476F5C24B5799E8B9914934DD28]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+            <groupfilter function='member' level='[payment_method]' member='&quot;Debit Card&quot;' user:ui-action-filter='[Action4_84D5937A732A462CB5F7A62103B9FA18]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]'>
+            <groupfilter function='member' level='[shopping_mall]' member='&quot;Metropol AVM&quot;' user:ui-action-filter='[Action3_73CCDEF79AF14B22A73DE5C134743BC6]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.0pazx8f1decswp1576b7r14fdvgx].[mn:invoice_date:ok]'>
             <groupfilter function='union' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'>
@@ -1504,7 +1789,10 @@
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[mn:invoice_date:ok]</column>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[my:invoice_date:ok]</column>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[tyr:invoice_date:ok]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Shopping Mall)]</column>
             <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Payment Method)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (Category)]</column>
+            <column>[federated.0pazx8f1decswp1576b7r14fdvgx].[Action (MONTH(Invoice Date))]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -1585,8 +1873,8 @@
       </datasource-dependencies>
       <zones>
         <zone h='100000' id='10' type-v2='layout-basic' w='100000' x='0' y='0'>
-          <zone h='98028' id='13' param='vert' type-v2='layout-flow' w='99048' x='476' y='986'>
-            <zone h='6041' id='14' type-v2='title' w='99048' x='476' y='986'>
+          <zone h='97886' id='13' param='vert' type-v2='layout-flow' w='99032' x='484' y='1057'>
+            <zone h='4227' id='14' type-v2='title' w='99032' x='484' y='1057'>
               <zone-style>
                 <format attr='border-color' value='#000000' />
                 <format attr='border-style' value='none' />
@@ -1594,7 +1882,7 @@
                 <format attr='margin' value='4' />
               </zone-style>
             </zone>
-            <zone fixed-size='746' h='91985' id='11' is-fixed='true' type-v2='layout-basic' w='99048' x='476' y='7027' />
+            <zone fixed-size='746' h='93659' id='11' is-fixed='true' type-v2='layout-basic' w='99032' x='484' y='5284' />
           </zone>
           <zone-style>
             <format attr='border-color' value='#000000' />
@@ -1628,9 +1916,9 @@
           </layout-options>
           <size maxheight='2350' minheight='2350' sizing-mode='vscroll' />
           <zones>
-            <zone h='100000' id='24' type-v2='layout-basic' w='100000' x='0' y='0'>
-              <zone h='98028' id='23' param='vert' type-v2='layout-flow' w='99048' x='476' y='986'>
-                <zone h='6041' id='14' type-v2='title' w='99048' x='476' y='986'>
+            <zone h='100000' id='26' type-v2='layout-basic' w='100000' x='0' y='0'>
+              <zone h='97886' id='25' param='vert' type-v2='layout-flow' w='99032' x='484' y='1057'>
+                <zone h='4227' id='14' type-v2='title' w='99032' x='484' y='1057'>
                   <zone-style>
                     <format attr='border-color' value='#000000' />
                     <format attr='border-style' value='none' />
@@ -2125,1175 +2413,9 @@
                   </columns>
                 </tuple-descriptor>
                 <tuple>
-                  <value>970</value>
-                  <value>2514146.7899999977</value>
-                  <value>#2023-03-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3628</value>
-                  <value>9508662.9600000624</value>
-                  <value>#2023-02-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3926</value>
-                  <value>9485599.8300000485</value>
-                  <value>#2023-01-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3799</value>
-                  <value>9869885.4800000153</value>
-                  <value>#2022-12-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3765</value>
-                  <value>8941584.6600000188</value>
-                  <value>#2022-11-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3848</value>
-                  <value>10282075.370000046</value>
-                  <value>#2022-10-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3683</value>
-                  <value>9607629.290000055</value>
-                  <value>#2022-09-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3912</value>
-                  <value>9651705.5900000762</value>
-                  <value>#2022-08-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3893</value>
-                  <value>10067602.950000031</value>
-                  <value>#2022-07-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3798</value>
-                  <value>9647503.9500000626</value>
-                  <value>#2022-06-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3849</value>
-                  <value>9947574.1300000492</value>
-                  <value>#2022-05-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3763</value>
-                  <value>9326144.4400000498</value>
-                  <value>#2022-04-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3947</value>
-                  <value>9986685.1600000728</value>
-                  <value>#2022-03-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3447</value>
-                  <value>8344111.9200000446</value>
-                  <value>#2022-02-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3847</value>
-                  <value>9764311.1400000472</value>
-                  <value>#2022-01-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3881</value>
-                  <value>9585200.1600000914</value>
-                  <value>#2021-12-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3798</value>
-                  <value>9265555.2900000922</value>
-                  <value>#2021-11-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3916</value>
-                  <value>10263015.060000071</value>
-                  <value>#2021-10-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3670</value>
-                  <value>9188165.6200000551</value>
-                  <value>#2021-09-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3723</value>
-                  <value>9630655.7000000551</value>
-                  <value>#2021-08-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3984</value>
-                  <value>10311119.680000085</value>
-                  <value>#2021-07-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3783</value>
-                  <value>9286271.3500000611</value>
+                  <value>11</value>
+                  <value>3548.1600000000003</value>
                   <value>#2021-06-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3848</value>
-                  <value>9771756.9700000416</value>
-                  <value>#2021-05-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3724</value>
-                  <value>9389541.5400000699</value>
-                  <value>#2021-04-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3813</value>
-                  <value>9455359.3800000586</value>
-                  <value>#2021-03-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3407</value>
-                  <value>8772315.2200000603</value>
-                  <value>#2021-02-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3835</value>
-                  <value>9641614.62000007</value>
-                  <value>#2021-01-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3835</value>
-                  <value>9641614.62000007</value>
-                  <value>#2021-01-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3407</value>
-                  <value>8772315.2200000603</value>
-                  <value>#2021-02-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3813</value>
-                  <value>9455359.3800000586</value>
-                  <value>#2021-03-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3724</value>
-                  <value>9389541.5400000699</value>
-                  <value>#2021-04-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3848</value>
-                  <value>9771756.9700000416</value>
-                  <value>#2021-05-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3783</value>
-                  <value>9286271.3500000611</value>
-                  <value>#2021-06-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3984</value>
-                  <value>10311119.680000085</value>
-                  <value>#2021-07-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3723</value>
-                  <value>9630655.7000000551</value>
-                  <value>#2021-08-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3670</value>
-                  <value>9188165.6200000551</value>
-                  <value>#2021-09-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3916</value>
-                  <value>10263015.060000071</value>
-                  <value>#2021-10-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3798</value>
-                  <value>9265555.2900000922</value>
-                  <value>#2021-11-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3881</value>
-                  <value>9585200.1600000914</value>
-                  <value>#2021-12-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3847</value>
-                  <value>9764311.1400000472</value>
-                  <value>#2022-01-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3447</value>
-                  <value>8344111.9200000446</value>
-                  <value>#2022-02-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3947</value>
-                  <value>9986685.1600000728</value>
-                  <value>#2022-03-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3763</value>
-                  <value>9326144.4400000498</value>
-                  <value>#2022-04-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3849</value>
-                  <value>9947574.1300000492</value>
-                  <value>#2022-05-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3798</value>
-                  <value>9647503.9500000626</value>
-                  <value>#2022-06-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3893</value>
-                  <value>10067602.950000031</value>
-                  <value>#2022-07-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3912</value>
-                  <value>9651705.5900000762</value>
-                  <value>#2022-08-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3683</value>
-                  <value>9607629.290000055</value>
-                  <value>#2022-09-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3848</value>
-                  <value>10282075.370000046</value>
-                  <value>#2022-10-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3765</value>
-                  <value>8941584.6600000188</value>
-                  <value>#2022-11-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3799</value>
-                  <value>9869885.4800000153</value>
-                  <value>#2022-12-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3926</value>
-                  <value>9485599.8300000485</value>
-                  <value>#2023-01-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>3628</value>
-                  <value>9508662.9600000624</value>
-                  <value>#2023-02-01 00:00:00#</value>
-                </tuple>
-              </tuple-reference>
-              <tuple-reference>
-                <tuple-descriptor>
-                  <pane-descriptor>
-                    <x-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                    </x-fields>
-                    <y-fields>
-                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    </y-fields>
-                  </pane-descriptor>
-                  <columns>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[ctd:invoice_no:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
-                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tmn:invoice_date:qk]</field>
-                  </columns>
-                </tuple-descriptor>
-                <tuple>
-                  <value>970</value>
-                  <value>2514146.7899999977</value>
-                  <value>#2023-03-01 00:00:00#</value>
                 </tuple>
               </tuple-reference>
             </tuple-selection>
@@ -3301,6 +2423,30 @@
         </viewpoint>
         <viewpoint name='Payment Method Analysis'>
           <zoom type='entire-view' />
+          <selection-collection>
+            <tuple-selection>
+              <tuple-reference>
+                <tuple-descriptor>
+                  <pane-descriptor>
+                    <x-fields>
+                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[none:payment_method:nk]</field>
+                    </x-fields>
+                    <y-fields>
+                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
+                    </y-fields>
+                  </pane-descriptor>
+                  <columns>
+                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[none:payment_method:nk]</field>
+                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
+                  </columns>
+                </tuple-descriptor>
+                <tuple>
+                  <value>&quot;Debit Card&quot;</value>
+                  <value>3548.1600000000003</value>
+                </tuple>
+              </tuple-reference>
+            </tuple-selection>
+          </selection-collection>
         </viewpoint>
         <viewpoint name='Sales by Gender'>
           <zoom type='entire-view' />
@@ -3311,11 +2457,52 @@
         </viewpoint>
         <viewpoint name='Top 5 Malls by Customer Sales'>
           <zoom type='entire-view' />
+          <selection-collection>
+            <tuple-selection>
+              <tuple-reference>
+                <tuple-descriptor>
+                  <pane-descriptor>
+                    <x-fields>
+                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
+                    </x-fields>
+                    <y-fields>
+                      <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[none:shopping_mall:nk]</field>
+                    </y-fields>
+                  </pane-descriptor>
+                  <columns>
+                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[max:shopping_mall:nk]</field>
+                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[none:shopping_mall:nk]</field>
+                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[sum:Calculation_1105352267185954816:qk]</field>
+                  </columns>
+                </tuple-descriptor>
+                <tuple>
+                  <value>&quot;Metropol AVM&quot;</value>
+                  <value>&quot;Metropol AVM&quot;</value>
+                  <value>3548.1600000000003</value>
+                </tuple>
+              </tuple-reference>
+            </tuple-selection>
+          </selection-collection>
           <highlight field='[federated.0pazx8f1decswp1576b7r14fdvgx].[max:shopping_mall:nk]'>
             <bucket-selection />
           </highlight>
         </viewpoint>
         <viewpoint name='Top 5 Sales by Category'>
+          <selection-collection>
+            <node-selection select-tuples='false'>
+              <oriented-node-reference orientation='vertical'>
+                <node-reference>
+                  <fields>
+                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[none:category:nk]</field>
+                  </fields>
+                  <multibucket>
+                    <bucket>&quot;Toys&quot;</bucket>
+                  </multibucket>
+                </node-reference>
+                <page-reference />
+              </oriented-node-reference>
+            </node-selection>
+          </selection-collection>
           <highlight field='[federated.0pazx8f1decswp1576b7r14fdvgx].[none:category:nk]'>
             <bucket-selection />
           </highlight>
@@ -3331,368 +2518,281 @@
         </viewpoint>
         <viewpoint name='Yearly Sales Trend'>
           <zoom type='entire-view' />
+          <selection-collection>
+            <node-selection select-tuples='false'>
+              <oriented-node-reference orientation='horizontal'>
+                <node-reference>
+                  <fields>
+                    <field>[federated.0pazx8f1decswp1576b7r14fdvgx].[tyr:invoice_date:ok]</field>
+                  </fields>
+                  <multibucket>
+                    <bucket>#2021-01-01 00:00:00#</bucket>
+                  </multibucket>
+                </node-reference>
+                <page-reference />
+              </oriented-node-reference>
+            </node-selection>
+          </selection-collection>
           <highlight field='[federated.0pazx8f1decswp1576b7r14fdvgx].[my:invoice_date:ok]'>
             <bucket-selection />
           </highlight>
         </viewpoint>
       </viewpoints>
-      <active id='11' />
+      <active id='18' />
+      <device-preview visible='true' />
       <simple-id uuid='{7152C96D-DAC5-4EF7-8625-9C7A55AC6F39}' />
     </window>
   </windows>
   <thumbnails>
     <thumbnail height='192' name='DASHBOARDOF CUSTOMER SALES ANALYSIS' width='192'>
       iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAABJ0AAASdAHeZh94
-      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
+      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
+      AElFTkSuQmCC
     </thumbnail>
     <thumbnail height='192' name='Orders vs. Sales' width='192'>
       iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAABJ0AAASdAHeZh94
